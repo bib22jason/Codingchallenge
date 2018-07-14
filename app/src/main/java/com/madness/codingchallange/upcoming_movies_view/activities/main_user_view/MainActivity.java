@@ -9,7 +9,7 @@ import com.madness.codingchallange.R;
 import com.madness.codingchallange.upcoming_movies_view.fragments.UpcomingMoviesFragment;
 
 /**
- * Activity that holds the fragment that contains the list of the upcoming movies
+ * This activity holds the fragment that contains the list of the upcoming movies
  */
 public class MainActivity extends AppCompatActivity implements MainActivityContracts.MainActivityView {
 
@@ -29,6 +29,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         }
     }
 
+    /**
+     * Destroy activity on back pressed, no needed for anything else
+     */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -36,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     }
 
     /**
-     * Method that load the fragment
+     * Method that loads the fragment in the container
      * @param fragment to be load
      */
     @Override

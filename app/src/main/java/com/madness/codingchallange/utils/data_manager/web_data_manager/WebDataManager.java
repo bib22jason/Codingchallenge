@@ -1,5 +1,7 @@
 package com.madness.codingchallange.utils.data_manager.web_data_manager;
 
+import android.support.annotation.NonNull;
+
 import com.madness.codingchallange.upcoming_movies_view.fragments.UpcomingMoviesPresenter;
 import com.madness.codingchallange.utils.data_object.ConfigurationResponse;
 import com.madness.codingchallange.utils.data_object.GenreResponse;
@@ -25,7 +27,7 @@ public class WebDataManager {
         this.presenter = presenter;
     }
 
-    public static Retrofit getAdapter() {
+    private static Retrofit getAdapter() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(Constants.BASE_URL)
@@ -48,12 +50,12 @@ public class WebDataManager {
             Call<UpComingMoviesResponse> webServiceCall = service.getUpcomingMovies(url);
             webServiceCall.enqueue(new Callback<UpComingMoviesResponse>() {
                 @Override
-                public void onResponse(Call<UpComingMoviesResponse> call, Response<UpComingMoviesResponse> response) {
+                public void onResponse(@NonNull Call<UpComingMoviesResponse> call, @NonNull Response<UpComingMoviesResponse> response) {
                     presenter.getUpcomingMoviesSuccess(response);
                 }
 
                 @Override
-                public void onFailure(Call<UpComingMoviesResponse> call, Throwable t) {
+                public void onFailure(@NonNull Call<UpComingMoviesResponse> call, @NonNull Throwable t) {
                     presenter.getUpcomingMoviesFail(t);
                 }
             });
@@ -71,12 +73,12 @@ public class WebDataManager {
             Call<ConfigurationResponse> webServiceCall = service.getConfiguration();
             webServiceCall.enqueue(new Callback<ConfigurationResponse>() {
                 @Override
-                public void onResponse(Call<ConfigurationResponse> call, Response<ConfigurationResponse> response) {
-                    presenter.getConfigurationSucces(response);
+                public void onResponse(@NonNull Call<ConfigurationResponse> call, @NonNull Response<ConfigurationResponse> response) {
+                    presenter.getConfigurationSuccess(response);
                 }
 
                 @Override
-                public void onFailure(Call<ConfigurationResponse> call, Throwable t) {
+                public void onFailure(@NonNull Call<ConfigurationResponse> call, @NonNull Throwable t) {
                     presenter.getConfigurationFail(t);
                 }
             });
@@ -94,12 +96,12 @@ public class WebDataManager {
             Call<GenreResponse> webServiceCall = service.getGenreList();
             webServiceCall.enqueue(new Callback<GenreResponse>() {
                 @Override
-                public void onResponse(Call<GenreResponse> call, Response<GenreResponse> response) {
+                public void onResponse(@NonNull Call<GenreResponse> call, @NonNull Response<GenreResponse> response) {
                     presenter.getGenreListSuccess(response);
                 }
 
                 @Override
-                public void onFailure(Call<GenreResponse> call, Throwable t) {
+                public void onFailure(@NonNull Call<GenreResponse> call, @NonNull Throwable t) {
                     presenter.getGenreListFail(t);
                 }
             });

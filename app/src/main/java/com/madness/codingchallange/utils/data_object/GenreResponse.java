@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Web services response for  {@link com.madness.codingchallange.utils.data_manager.web_data_manager.WebDataManager #getGenreList}
+ * Web services response for  {@link com.madness.codingchallange.utils.data_manager.web_data_manager.WebDataManager#getGenreList}
  * used in {@link com.madness.codingchallange.upcoming_movies_view.fragments.UpcomingMoviesFragment}
  */
 

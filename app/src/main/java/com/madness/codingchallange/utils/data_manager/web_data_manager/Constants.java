@@ -1,5 +1,8 @@
 package com.madness.codingchallange.utils.data_manager.web_data_manager;
 
+/**
+ * Class used a constants for web data manager
+ */
 public class Constants {
 
     //API KEY and base URL for movie API

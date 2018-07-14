@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.madness.codingchallange.R;
-import com.madness.codingchallange.movie_info_view.activities.ShowMovieInfoactivity;
+import com.madness.codingchallange.movie_info_view.activities.ShowMovieInfoActivity;
 import com.madness.codingchallange.utils.UtilsMethods;
 import com.madness.codingchallange.utils.data_object.ConfigurationPojo;
 import com.madness.codingchallange.utils.data_object.GenrePojo;
@@ -39,8 +39,8 @@ public class UpcomingMoviesRecyclerAdapter extends RecyclerView.Adapter<Upcoming
      * @param configurationData list of data configuration from API
      * @param genreList the list of genres
      */
-    public UpcomingMoviesRecyclerAdapter(ArrayList<UpComingMoviesPojo> movieList, ConfigurationPojo configurationData,
-                                         ArrayList<GenrePojo> genreList) {
+    UpcomingMoviesRecyclerAdapter(ArrayList<UpComingMoviesPojo> movieList, ConfigurationPojo configurationData,
+                                  ArrayList<GenrePojo> genreList) {
         this.movieList = movieList;
         this.configurationData = configurationData;
         this.genreList = genreList;
@@ -50,7 +50,7 @@ public class UpcomingMoviesRecyclerAdapter extends RecyclerView.Adapter<Upcoming
      * Method that creates the new view for recycler
      * @param parent view parent
      * @param viewType view type
-     * @return
+     * @return new view holder
      */
     @NonNull
     @Override
@@ -81,7 +81,7 @@ public class UpcomingMoviesRecyclerAdapter extends RecyclerView.Adapter<Upcoming
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ShowMovieInfoactivity.class);
+                Intent intent = new Intent(v.getContext(), ShowMovieInfoActivity.class);
                 UpComingMoviesPojo data = movieList.get(holder.getAdapterPosition());
                 intent.putExtra("movieList", data);
                 intent.putExtra("genreList", genreList);

@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 /**
- * Web services response for  {@link com.madness.codingchallange.utils.data_manager.web_data_manager.WebDataManager #getConfiguration}
+ * Web services response for  {@link com.madness.codingchallange.utils.data_manager.web_data_manager.WebDataManager#getConfiguration}
  * used in {@link com.madness.codingchallange.upcoming_movies_view.fragments.UpcomingMoviesFragment}
  */
 

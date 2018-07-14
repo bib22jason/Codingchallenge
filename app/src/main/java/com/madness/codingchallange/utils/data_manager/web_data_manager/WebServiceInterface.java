@@ -16,7 +16,7 @@ public interface WebServiceInterface {
 
     /**
      * This method retrieves the list of upcoming movies
-     * @param url dinamyc URL to see other pages
+     * @param url dynamic URL to see other pages
      */
     @GET
     Call<UpComingMoviesResponse> getUpcomingMovies(@Url String url);

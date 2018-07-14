@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        tools:context=".movie_info_view.activities.ShowMovieInfoactivity">
+        tools:context=".movie_info_view.activities.ShowMovieInfoActivity">
 
         <TextView
             android:id="@+id/movie_title"
@@ -27,7 +27,8 @@
             android:layout_below="@id/movie_title"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="40dp"
-            tools:src="@drawable/ic_launcher_background" />
+            tools:src="@drawable/ic_launcher_background"
+            android:contentDescription="@string/movie_poster_string"/>
 
         <TextView
             android:id="@+id/overview_text"

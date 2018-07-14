@@ -23,7 +23,7 @@ public interface UpcomingMoviesContracts {
         void getUpcomingMoviesFail(Throwable t);
 
         void getConfiguration();
-        void getConfigurationSucces(Response<ConfigurationResponse> response);
+        void getConfigurationSuccess(Response<ConfigurationResponse> response);
         void getConfigurationFail(Throwable t);
 
         void getGenreList();

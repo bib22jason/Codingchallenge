@@ -58,7 +58,7 @@ public class UpcomingMoviesFragment extends Fragment implements UpcomingMoviesCo
      * onCreateView method where views are assigned also set the presenbter and make the first web service call
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_upcoming_movies, container, false);
@@ -67,16 +67,23 @@ public class UpcomingMoviesFragment extends Fragment implements UpcomingMoviesCo
         pageL.setOnClickListener(changPageButtons);
         pageA.setOnClickListener(changPageButtons);
         recyclerView = view.findViewById(R.id.recycler_container);
+
+        //Basic config of Recycler view
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        //Presenter init
         presenter.init(this);
+
         if(savedInstanceState != null){
             movieList = (ArrayList<UpComingMoviesPojo>) savedInstanceState.getSerializable(MOVIE_LIST);
             genreData = (ArrayList<GenrePojo>) savedInstanceState.getSerializable(GENRE_LIST);
             dataConfig = (ConfigurationResponse) savedInstanceState.getSerializable(DATA_CONFIG);
-            adapter = new UpcomingMoviesRecyclerAdapter(movieList, dataConfig.getImages(), genreData);
-            recyclerView.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
+            if(dataConfig != null) {
+                adapter = new UpcomingMoviesRecyclerAdapter(movieList, dataConfig.getImages(), genreData);
+                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
         }else {
             presenter.showLoading();
             presenter.getConfiguration();
@@ -85,7 +92,7 @@ public class UpcomingMoviesFragment extends Fragment implements UpcomingMoviesCo
     }
 
     /**
-     * OnClickListner method for both buttons
+     * OnClickListner method for buttons
      */
     private View.OnClickListener changPageButtons = new View.OnClickListener() {
         @Override
@@ -157,15 +164,27 @@ public class UpcomingMoviesFragment extends Fragment implements UpcomingMoviesCo
     @Override
     public void getUpcomingMoviesSuccess(Response<UpComingMoviesResponse> response) {
         UpComingMoviesResponse data = response.body();
-        maxPages = data.getTotal_pages();
+        if(data != null) {
+            maxPages = data.getTotal_pages();
+        }
         movieList.clear();
-        movieList.addAll(Arrays.asList(data.getResults()));
-        adapter = new UpcomingMoviesRecyclerAdapter(movieList, dataConfig.getImages(), genreData);
-        recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-        presenter.hideLoading();
-        pageL.setEnabled(true);
-        pageA.setEnabled(true);
+        if(data != null) {
+            movieList.addAll(Arrays.asList(data.getResults()));
+            adapter = new UpcomingMoviesRecyclerAdapter(movieList, dataConfig.getImages(), genreData);
+            recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            presenter.hideLoading();
+
+            //re enable buttons
+            pageL.setEnabled(true);
+            pageA.setEnabled(true);
+        }else{
+            //re enable buttons
+            pageL.setEnabled(true);
+            pageA.setEnabled(true);
+            presenter.hideLoading();
+            Toast.makeText(getContext(), "There was an error while downloading, please try again!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -185,8 +204,14 @@ public class UpcomingMoviesFragment extends Fragment implements UpcomingMoviesCo
     @Override
     public void getGenreListSuccess(Response<GenreResponse> response) {
         GenreResponse data = response.body();
-        genreData.addAll(Arrays.asList(data.getGenres()));
-        presenter.getUpcomingMovies(page);
+        if(data != null) {
+            genreData.addAll(Arrays.asList(data.getGenres()));
+            presenter.getUpcomingMovies(page);
+        }else {
+            //avoid crashing errors, if null genres wont show up
+            genreData = new ArrayList<>();
+            presenter.getUpcomingMovies(page);
+        }
     }
 
     /**

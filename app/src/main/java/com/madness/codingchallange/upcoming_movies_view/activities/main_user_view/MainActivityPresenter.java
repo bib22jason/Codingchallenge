@@ -3,13 +3,13 @@ package com.madness.codingchallange.upcoming_movies_view.activities.main_user_vi
 import android.support.v4.app.Fragment;
 
 /**
- * Presenter of the activity that laods the fragmnet {@link com.madness.codingchallange.upcoming_movies_view.fragments.UpcomingMoviesFragment}
+ * Presenter of the activity {@link MainActivity}
  */
 public class MainActivityPresenter implements MainActivityContracts.MainActivityPresenter {
 
     private MainActivityContracts.MainActivityView view;
 
-    public MainActivityPresenter(MainActivityContracts.MainActivityView view) {
+    MainActivityPresenter(MainActivityContracts.MainActivityView view) {
         this.view = view;
     }
 

@@ -10,7 +10,6 @@ import retrofit2.Response;
 /**
  * Presenter class for the fragment {@link UpcomingMoviesFragment}
  */
-
 public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.UpcomingMoviesPresenter {
 
     //Needed variables for setting the presenter and the WebDataManager for this ´presenter
@@ -18,7 +17,6 @@ public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.Upcoming
     private UpcomingMoviesContracts.UpcomingMoviesView view;
 
     /**
-     *
      * @param view reference from fragment {@link UpcomingMoviesFragment} after implements {@link UpcomingMoviesContracts.UpcomingMoviesView}
      */
     @Override
@@ -33,6 +31,7 @@ public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.Upcoming
     public void showLoading() {
         view.showLoading();
     }
+
     /**
      * hides loading alert
      */
@@ -53,12 +52,12 @@ public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.Upcoming
      * Method that recieves response from {@link WebDataManager} and then passes it to the presenter get the data
      */
     @Override
-    public void getConfigurationSucces(Response<ConfigurationResponse> response) {
+    public void getConfigurationSuccess(Response<ConfigurationResponse> response) {
         view.getConfigurationSuccess(response);
     }
 
     /**
-     * Method that recieves response from {@link WebDataManager} to let the presenter know there was a problem during download of the info
+     * If web service call fails {@link WebDataManager#getConfiguration()}, this will catch it
      */
     @Override
     public void getConfigurationFail(Throwable t) {
@@ -66,12 +65,13 @@ public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.Upcoming
     }
 
     /**
-     * Retrieves genre list data from API
+     * Web service call {@link WebDataManager#getGenreList()}
      */
     @Override
     public void getGenreList() {
         dataManager.getGenreList();
     }
+
     /**
      * Method that recieves response from {@link WebDataManager} and then passes it to the presenter get the data
      */
@@ -79,8 +79,9 @@ public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.Upcoming
     public void getGenreListSuccess(Response<GenreResponse> response) {
         view.getGenreListSuccess(response);
     }
+
     /**
-     * Method that recieves response from {@link WebDataManager} to let the presenter know there was a problem during download of the info
+     * If web service call fails {@link WebDataManager#getGenreList()} }, this will catch it
      */
     @Override
     public void getGenreListFail(Throwable t) {
@@ -100,8 +101,9 @@ public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.Upcoming
     public void getUpcomingMoviesSuccess(Response<UpComingMoviesResponse> response) {
         view.getUpcomingMoviesSuccess(response);
     }
+
     /**
-     * Method that recieves response from {@link WebDataManager} to let the presenter know there was a problem during download of the info
+     * If web service call fails {@link WebDataManager#getUpcomingMovies(Integer)}, this will catch it
      */
     @Override
     public void getUpcomingMoviesFail(Throwable t) {
