@@ -3,4 +3,12 @@
     <string name="movie_poster_string">Movie poster</string>
 
 
+    <!-- UpComingFragment strings -->
+    <string name="loading_dialog_string">Retrieving list</string>
+    <string name="error_msg_download_upcoming_movie_list">There was an error while downloading the information</string>
+    <string name="error_msg_downloading_again_string">There was an error while downloading, trying again!</string>
+    <string name="movie_image_info_holder_string">Movie image</string>
+    <string name="last_item_msg_string">Last item of the list reached</string>
+
+
 </resources>

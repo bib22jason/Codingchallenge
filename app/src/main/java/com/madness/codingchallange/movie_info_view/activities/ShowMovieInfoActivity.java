@@ -3,6 +3,7 @@ package com.madness.codingchallange.movie_info_view.activities;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.madness.codingchallange.R;
@@ -26,6 +27,7 @@ public class ShowMovieInfoActivity extends AppCompatActivity implements ShowMovi
     private ArrayList<GenrePojo> genreList = new ArrayList<>();
     private TextView movieTitle, genre, releaseDate, overview;
     private ImageView poster;
+    private RelativeLayout relativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class ShowMovieInfoActivity extends AppCompatActivity implements ShowMovi
         releaseDate = findViewById(R.id.release_date);
         overview = findViewById(R.id.movie_overview);
         poster = findViewById(R.id.movie_poster);
+        relativeLayout = findViewById(R.id.relative_background);
 
         if(getIntent() != null){
             movieData = (UpComingMoviesPojo) getIntent().getSerializableExtra("movieList");

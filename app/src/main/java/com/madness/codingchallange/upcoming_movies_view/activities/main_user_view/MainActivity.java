@@ -45,6 +45,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     @Override
     public void loadFragment(Fragment fragment) {
         FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack("tag").commit();
+        manager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }
 }

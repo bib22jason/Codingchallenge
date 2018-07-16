@@ -25,26 +25,11 @@ public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.Upcoming
     }
 
     /**
-     * Shows loading alert
-     */
-    @Override
-    public void showLoading() {
-        view.showLoading();
-    }
-
-    /**
-     * hides loading alert
-     */
-    @Override
-    public void hideLoading() {
-        view.hideLoading();
-    }
-
-    /**
      * Retrieves configuration data from API
      */
     @Override
     public void getConfiguration() {
+        view.showLoading();
         dataManager.getConfiguration();
     }
 
@@ -53,7 +38,7 @@ public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.Upcoming
      */
     @Override
     public void getConfigurationSuccess(Response<ConfigurationResponse> response) {
-        view.getConfigurationSuccess(response);
+        view.storeConfigurationData(response);
     }
 
     /**
@@ -61,7 +46,8 @@ public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.Upcoming
      */
     @Override
     public void getConfigurationFail(Throwable t) {
-        view.getUpcomingMoviesFail(t);
+        view.hideLoading();
+        view.getConfigurationFail(t);
     }
 
     /**
@@ -77,7 +63,7 @@ public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.Upcoming
      */
     @Override
     public void getGenreListSuccess(Response<GenreResponse> response) {
-        view.getGenreListSuccess(response);
+        view.storeGenreList(response);
     }
 
     /**
@@ -85,6 +71,7 @@ public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.Upcoming
      */
     @Override
     public void getGenreListFail(Throwable t) {
+        view.hideLoading();
         view.getGenreListFail(t);
     }
 
@@ -93,13 +80,18 @@ public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.Upcoming
      * @param page number of page
      */
     @Override
-    public void getUpcomingMovies(Integer page) {
+    public void getUpcomingMovies(Integer page, Integer scrollPosition) {
         dataManager.getUpcomingMovies(page);
+        if(scrollPosition != 0){
+            view.showLoading();
+            view.showLastItem(scrollPosition);
+        }
     }
 
     @Override
     public void getUpcomingMoviesSuccess(Response<UpComingMoviesResponse> response) {
-        view.getUpcomingMoviesSuccess(response);
+        view.showList(response);
+        view.hideLoading();
     }
 
     /**
@@ -107,8 +99,7 @@ public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.Upcoming
      */
     @Override
     public void getUpcomingMoviesFail(Throwable t) {
-        view.getUpcomingMoviesFail(t);
+        view.hideLoading();
+        view.showListFail(t);
     }
-
-
 }

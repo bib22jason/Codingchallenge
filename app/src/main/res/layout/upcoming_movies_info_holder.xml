@@ -1,70 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="450dp"
     android:layout_width="match_parent">
-
-    <ImageView
-        android:id="@+id/movie_poster"
-        android:layout_width="150dp"
-        android:layout_height="250dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        tools:src="@drawable/ic_launcher_background" />
 
     <TextView
         android:id="@+id/movie_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/title_top_margin"
         android:textAlignment="center"
-        android:layout_marginTop="20dp"
-        android:textStyle="bold"
-        android:textSize="20sp"
         android:textColor="@color/titleColor"
-        tools:text="Movie title"/>
+        android:textSize="@dimen/title_textsize"
+        android:textStyle="bold"
+        tools:text="Movie title" />
 
-    <LinearLayout
-        android:id="@+id/movie_info_container"
+    <ImageView
+        android:id="@+id/movie_poster"
+        android:layout_width="@dimen/poster_with"
+        android:layout_height="@dimen/poster_height"
+        android:layout_below="@id/movie_title"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/movie_image_info_holder_string"
+        tools:src="@drawable/ic_launcher_background" />
+
+    <TextView
+        android:id="@+id/movie_relase_date"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/movie_poster"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/release_textsize"
+        tools:text="Release date" />
+
+    <TextView
+        android:id="@+id/view_position"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_toEndOf="@id/movie_poster"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:weightSum="4"
-        android:orientation="vertical">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="50dp"/>
-
-        <TextView
-            android:id="@+id/movie_overview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            tools:text="Movie overview"
-            android:layout_weight="3"/>
-
-        <TextView
-            android:id="@+id/movie_genre"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
-            android:textColor="@color/black"
-            tools:text="Genres"
-            android:layout_weight=".25"/>
-
-        <TextView
-            android:id="@+id/movie_relase_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:textColor="@color/black"
-            tools:text="Relase date"
-            android:layout_weight=".25"/>
-
-    </LinearLayout>
+        android:visibility="visible"
+        tools:text="0"/>
 
 </merge>

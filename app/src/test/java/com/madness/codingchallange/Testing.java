@@ -47,7 +47,7 @@ public class Testing  implements UpcomingMoviesContracts.UpcomingMoviesView{
 
     //This is the response that comes from the server when success getting the upcoming movie list
     @Override
-    public void getUpcomingMoviesSuccess(Response<UpComingMoviesResponse> response) {
+    public void showList(Response<UpComingMoviesResponse> response) {
         movieData = response.body();
         synchronized (syncObject){
             syncObject.notify();
@@ -56,7 +56,7 @@ public class Testing  implements UpcomingMoviesContracts.UpcomingMoviesView{
 
     //This is the response from web service when it fails getting the upcoming movie list
     @Override
-    public void getUpcomingMoviesFail(Throwable t) {
+    public void showListFail(Throwable t) {
         movieData = null;
         synchronized (syncObject){
             syncObject.notify();
@@ -66,7 +66,7 @@ public class Testing  implements UpcomingMoviesContracts.UpcomingMoviesView{
     /* THE FOLLOWING METHODS ARE NOT NEEDED BUT THEY COME WITH THE INTERFACE*/
     /* NOTE: These methods can be used to test the response from the other web service calls*/
     @Override
-    public void getConfigurationSuccess(Response<ConfigurationResponse> response) {
+    public void storeConfigurationData(Response<ConfigurationResponse> response) {
 
     }
 
@@ -76,7 +76,7 @@ public class Testing  implements UpcomingMoviesContracts.UpcomingMoviesView{
     }
 
     @Override
-    public void getGenreListSuccess(Response<GenreResponse> response) {
+    public void storeGenreList(Response<GenreResponse> response) {
 
     }
 
