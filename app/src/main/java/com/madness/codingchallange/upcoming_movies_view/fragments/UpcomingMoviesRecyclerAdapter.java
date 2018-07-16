@@ -96,10 +96,10 @@ public class UpcomingMoviesRecyclerAdapter extends RecyclerView.Adapter<Upcoming
             onBottomReachListener.onBottomReach(position);
         }
 
-        if(BuildConfig.DEBUG){
-            holder.view_position.setVisibility(View.VISIBLE);
-            holder.view_position.setText(String.valueOf("" + holder.getAdapterPosition()));
-        }
+        //if(BuildConfig.DEBUG){
+        //    holder.view_position.setVisibility(View.VISIBLE);
+        //    holder.view_position.setText(String.valueOf("" + holder.getAdapterPosition()));
+        //}
     }
 
     @Override

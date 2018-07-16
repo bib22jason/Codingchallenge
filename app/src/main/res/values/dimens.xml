@@ -8,4 +8,10 @@
     <dimen name="poster_with">150dp</dimen>
     <dimen name="title_top_margin">10dp</dimen>
 
+    <!-- activity_show_movie_infoactivity layouts dimen file -->
+    <dimen name="text_margin_start">10dp</dimen>
+    <dimen name="top_margin_default">10dp</dimen>
+    <dimen name="alrger_text_margin_start">20dp</dimen>
+    <dimen name="black_line_separator">1dp</dimen>
+
 </resources>

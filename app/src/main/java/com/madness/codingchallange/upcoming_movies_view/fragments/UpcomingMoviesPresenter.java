@@ -1,9 +1,14 @@
 package com.madness.codingchallange.upcoming_movies_view.fragments;
 
 import com.madness.codingchallange.utils.data_manager.web_data_manager.WebDataManager;
+import com.madness.codingchallange.utils.data_object.ConfigurationPojo;
 import com.madness.codingchallange.utils.data_object.ConfigurationResponse;
+import com.madness.codingchallange.utils.data_object.GenrePojo;
 import com.madness.codingchallange.utils.data_object.GenreResponse;
+import com.madness.codingchallange.utils.data_object.UpComingMoviesPojo;
 import com.madness.codingchallange.utils.data_object.UpComingMoviesResponse;
+
+import java.util.ArrayList;
 
 import retrofit2.Response;
 

@@ -45,7 +45,6 @@ public class UpcomingMoviesFragment extends Fragment
     private static Integer PAGE = 1;
     private static Integer NO_SCROLLING = 0;
     private Integer maxPages = 0;
-    private LinearLayoutManager layoutManager;
     private static String TAG = UpcomingMoviesFragment.class.getSimpleName();
 
     public static UpcomingMoviesFragment newInstance() {
@@ -65,8 +64,6 @@ public class UpcomingMoviesFragment extends Fragment
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_upcoming_movies, container, false);
         recyclerView = view.findViewById(R.id.recycler_container);
-
-        //TODO: Creat a dimens file with all the measures needed in the layouts
 
         //Basic config of Recycler view
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -92,6 +89,7 @@ public class UpcomingMoviesFragment extends Fragment
 
     /**
      * Save fragment state
+     *
      * @param outState bundle with info stored
      */
     @Override
@@ -109,7 +107,7 @@ public class UpcomingMoviesFragment extends Fragment
     public void showLoading() {
         if (dialog == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setCancelable(false);
+            builder.setCancelable(true);
             builder.setMessage(R.string.loading_dialog_string);
             dialog = builder.create();
             dialog.show();
@@ -147,10 +145,10 @@ public class UpcomingMoviesFragment extends Fragment
             adapter.setOnBottomReachListener(new UpcomingMoviesRecyclerAdapter.OnBottomReachListener() {
                 @Override
                 public void onBottomReach(int position) {
-                    if(PAGE < maxPages) {
+                    if (PAGE < maxPages) {
                         PAGE++;
                         presenter.getUpcomingMovies(PAGE, position);
-                    }else{
+                    } else {
                         Toast.makeText(getContext(), R.string.last_item_msg_string, Toast.LENGTH_SHORT).show();
                     }
                 }

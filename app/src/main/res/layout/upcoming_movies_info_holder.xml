@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/movie_poster"
-        android:visibility="visible"
+        android:visibility="gone"
         tools:text="0"/>
 
 </merge>
