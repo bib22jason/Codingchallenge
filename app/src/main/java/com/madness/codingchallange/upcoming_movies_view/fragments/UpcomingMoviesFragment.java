@@ -204,6 +204,7 @@ public class UpcomingMoviesFragment extends Fragment implements UpcomingMoviesCo
     @Override
     public void getGenreListSuccess(Response<GenreResponse> response) {
         GenreResponse data = response.body();
+        genreData.clear();
         if(data != null) {
             genreData.addAll(Arrays.asList(data.getGenres()));
             presenter.getUpcomingMovies(page);

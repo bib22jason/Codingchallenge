@@ -66,18 +66,22 @@ public class UpcomingMoviesRecyclerAdapter extends RecyclerView.Adapter<Upcoming
     @Override
     public void onBindViewHolder(@NonNull final UpcomingMoviesHolder holder, int position) {
         String overview = movieList.get(holder.getAdapterPosition()).getOverview();
+        String title = movieList.get(holder.getAdapterPosition()).getTitle();
+        //validate max number of chars
         if (overview.length() >= MAX_CHARS) {
             overview = overview.substring(0, MAX_CHARS) + "...";
         }
-        holder.title.setText(movieList.get(holder.getAdapterPosition()).getTitle());
-        holder.overview.setText(overview);
+        holder.title.setText(!title.isEmpty() ? title : "Missing title text");
+        holder.overview.setText(!overview.isEmpty() ? overview : "Missing overview text");
         String genres = UtilsMethods.setGenre(movieList.get(holder.getAdapterPosition()).getGenre_ids(), genreList);
-        holder.genres.setText(genres);
+        holder.genres.setText(!genres.isEmpty() ? genres : "Missing genres text");
         holder.relaseDate.setText(UtilsMethods.setReleaseDate(movieList.get(holder.getAdapterPosition()).getRelase_date()));
 
         Picasso.get()
                 .load(configurationData.getBase_url() + "/" + configurationData.getLogo_sizes()[4] + "/" + movieList.get(holder.getAdapterPosition()).getPoster_path())
+                .placeholder(R.drawable.ic_cloud_error_black_24dp)
                 .into(holder.poster);
+
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
