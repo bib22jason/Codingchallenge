@@ -240,6 +240,10 @@ public class UpcomingMoviesFragment extends Fragment
         Toast.makeText(getContext(), R.string.error_msg_download_upcoming_movie_list, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Method used to get current orientation of the screen
+     * @return screen orientation
+     */
     public int getScreenOrientation()
     {
         int orientation = Configuration.ORIENTATION_UNDEFINED;

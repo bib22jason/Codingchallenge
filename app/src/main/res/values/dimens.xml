@@ -32,5 +32,7 @@
     <dimen name="default_5dp">5dp</dimen>
     <dimen name="margin_top_movie_details">80dp</dimen>
     <dimen name="max_width_overview_text_card_view">400dp</dimen>
+    <dimen name="margin_end_card_text">20dp</dimen>
+    <dimen name="margin_end_overview_activity">20dp</dimen>
 
 </resources>

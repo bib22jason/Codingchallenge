@@ -40,6 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/top_margin_default"
         android:layout_marginStart="@dimen/larger_text_margin_start"
+        android:layout_marginEnd="@dimen/margin_end_overview_activity"
         android:textAlignment="textStart"
         tools:text="Movie Overview" />
 
