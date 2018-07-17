@@ -220,7 +220,7 @@ public class UpcomingMoviesFragment extends Fragment
             public void run() {
                 recyclerView.scrollToPosition(position - 1);
             }
-        }, 400);
+        }, 800);
     }
 
     /**
@@ -234,8 +234,7 @@ public class UpcomingMoviesFragment extends Fragment
     }
 
     /**
-     * Method used to get current orientation of the screen
-     * @return screen orientation
+     * Method used to get current orientation of the screen   * @return screen orientation
      */
     public int getScreenOrientation() {
         int orientation = Configuration.ORIENTATION_UNDEFINED;

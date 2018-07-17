@@ -74,7 +74,7 @@ public class UpcomingMoviesRecyclerAdapter extends RecyclerView.Adapter<Upcoming
     public void onBindViewHolder(@NonNull final UpcomingMoviesHolder holder, int position) {
         String title = movieList.get(holder.getAdapterPosition()).getTitle();
 
-        holder.title.setText(!title.isEmpty() ? title : "Missing title text");
+        holder.title.setText(!title.isEmpty() ? title : holder.title.getContext().getString(R.string.missing_text));
         holder.releaseDate.setText(UtilsMethods.setReleaseDateNoConcat(movieList.get(holder.getAdapterPosition()).getRelase_date()));
 
         Picasso.get()
@@ -87,9 +87,9 @@ public class UpcomingMoviesRecyclerAdapter extends RecyclerView.Adapter<Upcoming
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ShowMovieInfoActivity.class);
                 UpComingMoviesPojo data = movieList.get(holder.getAdapterPosition());
-                intent.putExtra("movieList", data);
-                intent.putExtra("genreList", genreList);
-                intent.putExtra("configurationData", configurationData);
+                intent.putExtra(ShowMovieInfoActivity.MOVIE_KEY, data);
+                intent.putExtra(ShowMovieInfoActivity.GENRE_LIST, genreList);
+                intent.putExtra(ShowMovieInfoActivity.CONFIG_DATA, configurationData);
                 v.getContext().startActivity(intent);
             }
         });

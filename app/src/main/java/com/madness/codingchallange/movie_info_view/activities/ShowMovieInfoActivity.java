@@ -27,9 +27,9 @@ public class ShowMovieInfoActivity extends AppCompatActivity implements ShowMovi
     private ArrayList<GenrePojo> genreList = new ArrayList<>();
     private TextView movieTitle, genre, releaseDate, overview;
     private ImageView poster, backPoster;
-    private static final String MOVIE_KEY = "movieList";
-    private static final String CONFIG_DATA = "configurationData";
-    private static final String GENRE_LIST = "genreList";
+    public static final String MOVIE_KEY = "movieList";
+    public static final String CONFIG_DATA = "configurationData";
+    public static final String GENRE_LIST = "genreList";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
