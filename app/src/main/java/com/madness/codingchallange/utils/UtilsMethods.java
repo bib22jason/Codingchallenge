@@ -29,9 +29,14 @@ public class UtilsMethods {
     public static String setGenreNoConcat(Integer[] ids, ArrayList<GenrePojo> pojo){
         StringBuilder genre = new StringBuilder();
         String finalMsg = "";
-        for(int i = 0; i < ids.length; i++){
-            for(GenrePojo data : pojo){
-                if(data.getId().equals(ids[i])){
+
+        if(pojo.isEmpty()){
+            return "Missing text";
+        }
+
+        for (Integer id : ids) {
+            for (GenrePojo data : pojo) {
+                if (data.getId().equals(id)) {
                     genre.append(data.getName());
                     genre.append(", ");
                 }

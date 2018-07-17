@@ -13,6 +13,7 @@
     <string name="overview_string">Overview:</string>
     <string name="genres_string">Genre(s):</string>
     <string name="frontal_poster_activity_cd">Frontal poster</string>
+    <string name="missing_text_smg_activity">Missing text</string>
 
 
 </resources>

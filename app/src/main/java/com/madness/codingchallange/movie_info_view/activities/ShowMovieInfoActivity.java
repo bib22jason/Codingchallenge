@@ -27,7 +27,9 @@ public class ShowMovieInfoActivity extends AppCompatActivity implements ShowMovi
     private ArrayList<GenrePojo> genreList = new ArrayList<>();
     private TextView movieTitle, genre, releaseDate, overview;
     private ImageView poster, backPoster;
-    private RelativeLayout relativeLayout;
+    private static final String MOVIE_KEY = "movieList";
+    private static final String CONFIG_DATA = "configurationData";
+    private static final String GENRE_LIST = "genreList";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +42,11 @@ public class ShowMovieInfoActivity extends AppCompatActivity implements ShowMovi
         overview = findViewById(R.id.mo_overview);
         poster = findViewById(R.id.frontal_poster);
         backPoster = findViewById(R.id.movie_back_poster);
-        relativeLayout = findViewById(R.id.relative_background);
 
         if(getIntent() != null){
-            movieData = (UpComingMoviesPojo) getIntent().getSerializableExtra("movieList");
-            dataConfig = (ConfigurationPojo) getIntent().getSerializableExtra("configurationData");
-            genreList = (ArrayList<GenrePojo>) getIntent().getSerializableExtra("genreList");
+            movieData = (UpComingMoviesPojo) getIntent().getSerializableExtra(MOVIE_KEY);
+            dataConfig = (ConfigurationPojo) getIntent().getSerializableExtra(CONFIG_DATA);
+            genreList = (ArrayList<GenrePojo>) getIntent().getSerializableExtra(GENRE_LIST);
             presenter.setData();
         }
     }
@@ -55,17 +56,38 @@ public class ShowMovieInfoActivity extends AppCompatActivity implements ShowMovi
      */
     @Override
     public void setData() {
-        movieTitle.setText(movieData.getTitle());
-        releaseDate.setText(UtilsMethods.setReleaseDateNoConcat(movieData.getRelase_date()));
-        overview.setText(movieData.getOverview());
-        genre.setText(UtilsMethods.setGenreNoConcat(movieData.getGenre_ids(), genreList));
+        String posterPath = "", backdropPath = "";
+        if(dataConfig != null){
+            posterPath = dataConfig.getBase_url() + "/" + dataConfig.getLogo_sizes()[4] + "/";
+            backdropPath = dataConfig.getBase_url() + "/" + dataConfig.getLogo_sizes()[4] + "/";
+        }
+        if(movieData != null){
+            String releaseString = movieData.getRelase_date();
+            String overviewString = movieData.getOverview();
+            String titleString = movieData.getTitle();
+            posterPath = posterPath.concat(movieData.getPoster_path());
+            backdropPath = backdropPath.concat(movieData.getBackdrop_path());
+
+            movieTitle.setText(titleString);
+            releaseDate.setText(releaseString);
+            overview.setText(overviewString);
+            genre.setText(UtilsMethods.setGenreNoConcat(movieData.getGenre_ids(), genreList));
+        }else{
+            movieTitle.setText(getString(R.string.missing_text_smg_activity));
+            releaseDate.setText(getString(R.string.missing_text_smg_activity));
+            overview.setText(getString(R.string.missing_text_smg_activity));
+            genre.setText(getString(R.string.missing_text_smg_activity));
+            posterPath = "missing_path";
+            backdropPath = "missing_path";
+        }
+
         Picasso.get()
-                .load(dataConfig.getBase_url() + "/" + dataConfig.getLogo_sizes()[4] + "/" + movieData.getPoster_path())
+                .load(posterPath)
                 .placeholder(R.drawable.progress_animation)
                 .into(poster);
 
         Picasso.get()
-                .load(dataConfig.getBase_url() + "/" + dataConfig.getLogo_sizes()[6] + "/" + movieData.getBackdrop_path())
+                .load(backdropPath)
                 .placeholder(R.drawable.progress_animation)
                 .fit()
                 .into(backPoster);
