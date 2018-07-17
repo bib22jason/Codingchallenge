@@ -237,10 +237,9 @@ public class UpcomingMoviesFragment extends Fragment
      * Method used to get current orientation of the screen
      * @return screen orientation
      */
-    public int getScreenOrientation()
-    {
+    public int getScreenOrientation() {
         int orientation = Configuration.ORIENTATION_UNDEFINED;
-        if(getActivity() != null) {
+        if (getActivity() != null) {
             Display getOrient = getActivity().getWindowManager().getDefaultDisplay();
 
             if (getOrient.getWidth() == getOrient.getHeight()) {
@@ -256,7 +255,7 @@ public class UpcomingMoviesFragment extends Fragment
         return orientation;
     }
 
-    public void setRecyclerBottomListener(){
+    public void setRecyclerBottomListener() {
         //Recycler listener to know when the user reach last item
         adapter.setOnBottomReachListener(new UpcomingMoviesRecyclerAdapter.OnBottomReachListener() {
             @Override

@@ -22,9 +22,22 @@ public class WebDataManager {
     private static Retrofit retrofit;
     private static WebServiceInterface service;
     private UpcomingMoviesPresenter presenter;
+    private MovieListCallBack callBack;
+
+    public void setMovieList(UpComingMoviesResponse movieList) {
+        this.movieList = movieList;
+        callBack.callBack(movieList);
+    }
+
+    private UpComingMoviesResponse movieList;
 
     public WebDataManager(UpcomingMoviesPresenter presenter) {
         this.presenter = presenter;
+    }
+
+    public WebDataManager(UpcomingMoviesPresenter presenter, MovieListCallBack callBack) {
+        this.presenter = presenter;
+        this.callBack = callBack;
     }
 
     private static Retrofit getAdapter() {
@@ -39,6 +52,7 @@ public class WebDataManager {
 
     /**
      * This method retrieves te upcoming movies list and after getting the response it passes the data to the presenter
+     *
      * @param page number of page the user want to go to. Used in {@link com.madness.codingchallange.upcoming_movies_view.fragments.UpcomingMoviesFragment}
      */
     public void getUpcomingMovies(Integer page) {
@@ -106,5 +120,9 @@ public class WebDataManager {
                 }
             });
         }
+    }
+
+    public interface MovieListCallBack {
+        void callBack(UpComingMoviesResponse data);
     }
 }
