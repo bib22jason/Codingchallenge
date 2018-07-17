@@ -61,10 +61,13 @@ public class ShowMovieInfoActivity extends AppCompatActivity implements ShowMovi
         genre.setText(UtilsMethods.setGenreNoConcat(movieData.getGenre_ids(), genreList));
         Picasso.get()
                 .load(dataConfig.getBase_url() + "/" + dataConfig.getLogo_sizes()[4] + "/" + movieData.getPoster_path())
+                .placeholder(R.drawable.progress_animation)
                 .into(poster);
 
         Picasso.get()
                 .load(dataConfig.getBase_url() + "/" + dataConfig.getLogo_sizes()[6] + "/" + movieData.getBackdrop_path())
+                .placeholder(R.drawable.progress_animation)
+                .fit()
                 .into(backPoster);
     }
 }

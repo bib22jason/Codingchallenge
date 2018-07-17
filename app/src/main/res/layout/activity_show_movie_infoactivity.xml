@@ -2,32 +2,34 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
     <RelativeLayout
         android:id="@+id/relative_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#F0F8FF"
         tools:context=".movie_info_view.activities.ShowMovieInfoActivity">
 
         <ImageView
             android:id="@+id/movie_back_poster"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="@dimen/card_back_poster_heigth"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:contentDescription="@string/movie_poster_string"
-            android:scaleType="fitXY"
             tools:src="@drawable/ic_launcher_background" />
 
         <ImageView
             android:id="@+id/frontal_poster"
             android:layout_width="wrap_content"
-            android:layout_height="150dp"
+            android:layout_height="@dimen/frontal_movie_poster_height"
             android:layout_alignBottom="@id/movie_back_poster"
-            android:layout_marginBottom="-80dp"
-            android:layout_marginStart="30dp"
-            tools:src="@drawable/ic_launcher_background"/>
+            android:layout_marginBottom="@dimen/margin_start_frontal_poster"
+            android:layout_marginStart="@dimen/margin_start_imageview_activity"
+            tools:src="@drawable/ic_launcher_background"
+            android:contentDescription="@string/frontal_poster_activity_cd"/>
 
         <TextView
             android:id="@+id/mo_title"
@@ -38,8 +40,8 @@
             android:layout_toEndOf="@id/frontal_poster"
             android:layout_alignTop="@id/frontal_poster"
             android:textAlignment="textStart"
-            android:textColor="@color/titleColor"
-            android:textSize="20sp"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/default_txt_size_title_movie"
             android:textStyle="bold"
             tools:text="Movie Title" />
 
@@ -49,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/mo_title"
             android:layout_alignStart="@id/mo_title"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="@dimen/default_5dp"
             android:textAlignment="textStart"
             android:textStyle="bold"
             tools:text="September 20 2018" />
@@ -58,7 +60,7 @@
             android:id="@+id/movie_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="@dimen/margin_top_movie_details"
             android:layout_below="@id/frontal_poster"
             android:orientation="vertical">
 

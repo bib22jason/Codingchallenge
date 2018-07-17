@@ -218,7 +218,7 @@ public class UpcomingMoviesFragment extends Fragment
             public void run() {
                 recyclerView.scrollToPosition(position - 1);
             }
-        }, 200);
+        }, 400);
     }
 
     /**

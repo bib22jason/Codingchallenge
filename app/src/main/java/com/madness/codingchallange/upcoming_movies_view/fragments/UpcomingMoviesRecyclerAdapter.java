@@ -1,7 +1,6 @@
 package com.madness.codingchallange.upcoming_movies_view.fragments;
 
 import android.content.Intent;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.madness.codingchallange.BuildConfig;
 import com.madness.codingchallange.R;
 import com.madness.codingchallange.movie_info_view.activities.ShowMovieInfoActivity;
 import com.madness.codingchallange.utils.UtilsMethods;
@@ -73,11 +71,11 @@ public class UpcomingMoviesRecyclerAdapter extends RecyclerView.Adapter<Upcoming
         String title = movieList.get(holder.getAdapterPosition()).getTitle();
 
         holder.title.setText(!title.isEmpty() ? title : "Missing title text");
-        holder.releaseDate.setText(UtilsMethods.setReleaseDate(movieList.get(holder.getAdapterPosition()).getRelase_date()));
+        holder.releaseDate.setText(UtilsMethods.setReleaseDateNoConcat(movieList.get(holder.getAdapterPosition()).getRelase_date()));
 
         Picasso.get()
                 .load(configurationData.getBase_url() + "/" + configurationData.getLogo_sizes()[4] + "/" + movieList.get(holder.getAdapterPosition()).getPoster_path())
-                .placeholder(R.drawable.ic_cloud_error_black_24dp)
+                .placeholder(R.drawable.progress_animation)
                 .into(holder.poster);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -92,14 +90,10 @@ public class UpcomingMoviesRecyclerAdapter extends RecyclerView.Adapter<Upcoming
             }
         });
 
-        if(position == movieList.size() - 1){
+        if(position == movieList.size() - 1 && onBottomReachListener != null){
             onBottomReachListener.onBottomReach(position);
         }
 
-        //if(BuildConfig.DEBUG){
-        //    holder.view_position.setVisibility(View.VISIBLE);
-        //    holder.view_position.setText(String.valueOf("" + holder.getAdapterPosition()));
-        //}
     }
 
     @Override
@@ -126,7 +120,7 @@ public class UpcomingMoviesRecyclerAdapter extends RecyclerView.Adapter<Upcoming
             poster = itemView.findViewById(R.id.movie_poster);
             title = itemView.findViewById(R.id.movie_title);
             releaseDate = itemView.findViewById(R.id.movie_relase_date);
-            view_position = itemView.findViewById(R.id.view_position);
+            view_position = itemView.findViewById(R.id.view_position_debug);
         }
     }
 

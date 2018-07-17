@@ -12,6 +12,7 @@
     <string name="missing_text">Missing text</string>
     <string name="overview_string">Overview:</string>
     <string name="genres_string">Genre(s):</string>
+    <string name="frontal_poster_activity_cd">Frontal poster</string>
 
 
 </resources>

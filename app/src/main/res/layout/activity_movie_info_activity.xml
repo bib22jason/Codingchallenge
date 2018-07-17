@@ -9,16 +9,26 @@
         android:layout_marginTop="@dimen/top_margin_default"
         android:layout_width="match_parent"
         android:layout_height="@dimen/black_line_separator"
-        android:paddingStart="@dimen/top_margin_default"
-        android:paddingEnd="@dimen/top_margin_default"
+        android:layout_marginStart="@dimen/default_10dp"
+        android:layout_marginEnd="@dimen/default_10dp"
         android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/genre_list"
+        android:layout_width="@dimen/poster_width_movie"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/larger_text_margin_start"
+        android:layout_marginTop="@dimen/top_margin_default"
+        android:textAlignment="textStart"
+        android:textStyle="bold"
+        tools:text="Genre" />
 
     <TextView
         android:id="@+id/over_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/top_margin_default"
-        android:layout_marginStart="@dimen/alrger_text_margin_start"
+        android:layout_marginStart="@dimen/larger_text_margin_start"
         android:textAlignment="textStart"
         android:textColor="@android:color/black"
         android:textStyle="bold"
@@ -29,46 +39,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/top_margin_default"
-        android:layout_marginStart="@dimen/alrger_text_margin_start"
+        android:layout_marginStart="@dimen/larger_text_margin_start"
         android:textAlignment="textStart"
         tools:text="Movie Overview" />
 
-    <View
-        android:layout_marginTop="@dimen/top_margin_default"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/black_line_separator"
-        android:paddingStart="@dimen/top_margin_default"
-        android:paddingEnd="@dimen/top_margin_default"
-        android:background="@android:color/darker_gray"/>
 
-    <TextView
-        android:id="@+id/gen_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/alrger_text_margin_start"
-        android:layout_marginTop="@dimen/top_margin_default"
-        android:textAlignment="textStart"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:text="@string/genres_string" />
-
-    <TextView
-        android:id="@+id/genre_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/alrger_text_margin_start"
-        android:layout_marginTop="@dimen/top_margin_default"
-        android:textAlignment="textStart"
-        android:textStyle="bold"
-        tools:text="Genre" />
-
-    <View
-        android:layout_marginTop="@dimen/top_margin_default"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/black_line_separator"
-        android:paddingStart="@dimen/top_margin_default"
-        android:paddingEnd="@dimen/top_margin_default"
-        android:background="@android:color/darker_gray"/>
 
 </merge>
 
