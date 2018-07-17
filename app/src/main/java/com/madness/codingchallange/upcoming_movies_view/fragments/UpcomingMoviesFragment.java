@@ -44,6 +44,7 @@ public class UpcomingMoviesFragment extends Fragment
     private static final String MOVIE_LIST = "movie_list";
     private static final String GENRE_LIST = "genre_list";
     private static final String DATA_CONFIG = "data_config";
+    private static final String MAX_PAGES = "max_pages";
     private static Integer PAGE = 1;
     private static Integer NO_SCROLLING = 0;
     private Integer maxPages = 0;
@@ -79,10 +80,12 @@ public class UpcomingMoviesFragment extends Fragment
             movieList = (ArrayList<UpComingMoviesPojo>) savedInstanceState.getSerializable(MOVIE_LIST);
             genreData = (ArrayList<GenrePojo>) savedInstanceState.getSerializable(GENRE_LIST);
             dataConfig = (ConfigurationResponse) savedInstanceState.getSerializable(DATA_CONFIG);
+            maxPages = savedInstanceState.getInt(MAX_PAGES);
             if (dataConfig != null) {
                 adapter = new UpcomingMoviesRecyclerAdapter(movieList, dataConfig.getImages(), genreData, orientation);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+                setRecyclerBottomListener();
             }
         } else {
             presenter.getConfiguration();
@@ -107,6 +110,7 @@ public class UpcomingMoviesFragment extends Fragment
         outState.putSerializable(MOVIE_LIST, movieList);
         outState.putSerializable(GENRE_LIST, genreData);
         outState.putSerializable(DATA_CONFIG, dataConfig);
+        outState.putInt(MAX_PAGES, maxPages);
     }
 
     /**
@@ -150,18 +154,7 @@ public class UpcomingMoviesFragment extends Fragment
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
-            //Recycler listener to know when the user reach last item
-            adapter.setOnBottomReachListener(new UpcomingMoviesRecyclerAdapter.OnBottomReachListener() {
-                @Override
-                public void onBottomReach(int position) {
-                    if (PAGE < maxPages) {
-                        PAGE++;
-                        presenter.getUpcomingMovies(PAGE, position);
-                    } else {
-                        Toast.makeText(getContext(), R.string.last_item_msg_string, Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+            setRecyclerBottomListener();
 
         } else {
             //response came null
@@ -261,5 +254,20 @@ public class UpcomingMoviesFragment extends Fragment
             }
         }
         return orientation;
+    }
+
+    public void setRecyclerBottomListener(){
+        //Recycler listener to know when the user reach last item
+        adapter.setOnBottomReachListener(new UpcomingMoviesRecyclerAdapter.OnBottomReachListener() {
+            @Override
+            public void onBottomReach(int position) {
+                if (PAGE < maxPages) {
+                    PAGE++;
+                    presenter.getUpcomingMovies(PAGE, position);
+                } else {
+                    Toast.makeText(getContext(), R.string.last_item_msg_string, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
