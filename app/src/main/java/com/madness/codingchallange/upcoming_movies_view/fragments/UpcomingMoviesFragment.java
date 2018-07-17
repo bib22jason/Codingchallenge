@@ -2,6 +2,7 @@ package com.madness.codingchallange.upcoming_movies_view.fragments;
 
 
 import android.app.AlertDialog;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +47,7 @@ public class UpcomingMoviesFragment extends Fragment
     private static Integer PAGE = 1;
     private static Integer NO_SCROLLING = 0;
     private Integer maxPages = 0;
+    private Integer orientation;
     private static String TAG = UpcomingMoviesFragment.class.getSimpleName();
 
     public static UpcomingMoviesFragment newInstance() {
@@ -71,13 +74,13 @@ public class UpcomingMoviesFragment extends Fragment
 
         //Presenter init
         presenter.init(this);
-
+        orientation = getScreenOrientation();
         if (savedInstanceState != null) {
             movieList = (ArrayList<UpComingMoviesPojo>) savedInstanceState.getSerializable(MOVIE_LIST);
             genreData = (ArrayList<GenrePojo>) savedInstanceState.getSerializable(GENRE_LIST);
             dataConfig = (ConfigurationResponse) savedInstanceState.getSerializable(DATA_CONFIG);
             if (dataConfig != null) {
-                adapter = new UpcomingMoviesRecyclerAdapter(movieList, dataConfig.getImages(), genreData);
+                adapter = new UpcomingMoviesRecyclerAdapter(movieList, dataConfig.getImages(), genreData, orientation);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
@@ -85,6 +88,12 @@ public class UpcomingMoviesFragment extends Fragment
             presenter.getConfiguration();
         }
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     /**
@@ -137,7 +146,7 @@ public class UpcomingMoviesFragment extends Fragment
         }
         if (data != null) {
             movieList.addAll(Arrays.asList(data.getResults()));
-            adapter = new UpcomingMoviesRecyclerAdapter(movieList, dataConfig.getImages(), genreData);
+            adapter = new UpcomingMoviesRecyclerAdapter(movieList, dataConfig.getImages(), genreData, orientation);
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
@@ -229,5 +238,24 @@ public class UpcomingMoviesFragment extends Fragment
     public void showListFail(Throwable t) {
         Log.e(TAG, t.getMessage());
         Toast.makeText(getContext(), R.string.error_msg_download_upcoming_movie_list, Toast.LENGTH_SHORT).show();
+    }
+
+    public int getScreenOrientation()
+    {
+        int orientation = Configuration.ORIENTATION_UNDEFINED;
+        if(getActivity() != null) {
+            Display getOrient = getActivity().getWindowManager().getDefaultDisplay();
+
+            if (getOrient.getWidth() == getOrient.getHeight()) {
+                orientation = Configuration.ORIENTATION_SQUARE;
+            } else {
+                if (getOrient.getWidth() < getOrient.getHeight()) {
+                    orientation = Configuration.ORIENTATION_PORTRAIT;
+                } else {
+                    orientation = Configuration.ORIENTATION_LANDSCAPE;
+                }
+            }
+        }
+        return orientation;
     }
 }

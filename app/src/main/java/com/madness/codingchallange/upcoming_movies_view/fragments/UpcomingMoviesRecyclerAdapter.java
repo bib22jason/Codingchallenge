@@ -1,6 +1,7 @@
 package com.madness.codingchallange.upcoming_movies_view.fragments;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +30,7 @@ public class UpcomingMoviesRecyclerAdapter extends RecyclerView.Adapter<Upcoming
     private ArrayList<UpComingMoviesPojo> movieList;
     private ArrayList<GenrePojo> genreList;
     private ConfigurationPojo configurationData;
+    private Integer orientation;
 
     //Bottom reach listener
     private OnBottomReachListener onBottomReachListener;
@@ -41,12 +43,14 @@ public class UpcomingMoviesRecyclerAdapter extends RecyclerView.Adapter<Upcoming
      * @param movieList the list of the upcoming movies
      * @param configurationData list of data configuration from API
      * @param genreList the list of genres
+     * @param orientation portrait or landscape
      */
     UpcomingMoviesRecyclerAdapter(ArrayList<UpComingMoviesPojo> movieList, ConfigurationPojo configurationData,
-                                  ArrayList<GenrePojo> genreList) {
+                                  ArrayList<GenrePojo> genreList, Integer orientation) {
         this.movieList = movieList;
         this.configurationData = configurationData;
         this.genreList = genreList;
+        this.orientation = orientation;
     }
 
     /**
@@ -94,6 +98,14 @@ public class UpcomingMoviesRecyclerAdapter extends RecyclerView.Adapter<Upcoming
             onBottomReachListener.onBottomReach(position);
         }
 
+        if(Configuration.ORIENTATION_LANDSCAPE == orientation){
+            String overvText = movieList.get(holder.getAdapterPosition()).getOverview();
+            holder.overview.setVisibility(View.VISIBLE);
+            holder.overview.setText(overvText);
+        }else{
+            holder.overview.setVisibility(View.GONE);
+            holder.overview.setText("");
+        }
     }
 
     @Override
@@ -110,7 +122,7 @@ public class UpcomingMoviesRecyclerAdapter extends RecyclerView.Adapter<Upcoming
          * Views from layout R.layout.upcoming_movies_card_holder
          */
         private CardView cardView;
-        private TextView title, releaseDate, view_position;
+        private TextView title, releaseDate, overview;
         private ImageView poster;
 
         UpcomingMoviesHolder(View itemView) {
@@ -119,8 +131,8 @@ public class UpcomingMoviesRecyclerAdapter extends RecyclerView.Adapter<Upcoming
             cardView = itemView.findViewById(R.id.cardview);
             poster = itemView.findViewById(R.id.movie_poster);
             title = itemView.findViewById(R.id.movie_title);
+            overview = itemView.findViewById(R.id.movie_over);
             releaseDate = itemView.findViewById(R.id.movie_relase_date);
-            view_position = itemView.findViewById(R.id.view_position_debug);
         }
     }
 

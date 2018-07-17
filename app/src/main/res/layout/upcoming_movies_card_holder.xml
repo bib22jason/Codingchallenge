@@ -47,6 +47,18 @@
 
 
             <TextView
+                android:id="@+id/movie_over"
+                android:layout_width="@dimen/max_width_overview_text_card_view"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/movie_poster"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/title_textsize"
+                android:layout_below="@id/movie_title"
+                android:layout_marginTop="@dimen/title_top_margin"/>
+
+
+            <TextView
                 android:id="@+id/movie_relase_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,12 +71,6 @@
                 android:textSize="@dimen/release_textsize"
                 tools:text="Release date" />
 
-            <TextView
-                android:id="@+id/view_position_debug"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:text="0" />
 
         </RelativeLayout>
 
