@@ -3,7 +3,7 @@ Coding challenge for Archtouch no special build instrucctions.
 
 This app shows a list of upcoming movies. This information is retrieved from the API: TheMovieDB using Retrofit 2 as HTTP client.
 
-The list comes from a web service, and then is showed to the user in a recycler view. At the bottom of the UI two buttons added were added as controls for navigating in the list. Two more web services were needed to get ciertain properpties needed to translate the movie genre and get the base url for getting the poster for each movie. This images where loaded into a Image View using asyncronous calls with Piccaso. 
+The list comes from a web service, and then is showed to the user in a recycler view. Two more web services were needed to get ciertain properpties needed to translate the movie genre and get the base url for getting the poster for each movie. This images where loaded into a Image View using asyncronous calls with Piccaso. 
 
 This app was created using a Model View Presenter (MVP) pattern as architectural design. 
 
