@@ -21,12 +21,46 @@ public class UtilsMethods {
             }
         }
         if(genre.toString().endsWith(", ")){
-            finalMsg = genre.substring(0, genre.length() - 2).toString();
+            finalMsg = genre.substring(0, genre.length() - 2);
         }
         return "Genre: " + finalMsg;
     }
 
+    public static String setGenreNoConcat(Integer[] ids, ArrayList<GenrePojo> pojo){
+        StringBuilder genre = new StringBuilder();
+        String finalMsg = "";
+
+        if(pojo.isEmpty()){
+            return "Missing text";
+        }
+
+        for (Integer id : ids) {
+            for (GenrePojo data : pojo) {
+                if (data.getId().equals(id)) {
+                    genre.append(data.getName());
+                    genre.append(", ");
+                }
+            }
+        }
+        if(genre.toString().endsWith(", ")){
+            finalMsg = genre.substring(0, genre.length() - 2);
+        }
+        return finalMsg;
+    }
+
     public static String setReleaseDate(String releaseDate){
-        return "Release date: " + releaseDate;
+        if(releaseDate.isEmpty()) {
+            return "Missing release date!";
+        }else{
+            return "Release date: " + releaseDate;
+        }
+    }
+
+    public static String setReleaseDateNoConcat(String releaseDate){
+        if(releaseDate.isEmpty()) {
+            return "Missing release date!";
+        }else{
+            return releaseDate;
+        }
     }
 }

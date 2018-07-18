@@ -2,17 +2,18 @@ package com.madness.codingchallange.upcoming_movies_view.fragments;
 
 
 import android.app.AlertDialog;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.madness.codingchallange.R;
@@ -30,23 +31,27 @@ import retrofit2.Response;
 /**
  * Fragment that contains the list of upcoming movies, get the configuration data, genre list from API and the present it to the user
  */
-public class UpcomingMoviesFragment extends Fragment implements UpcomingMoviesContracts.UpcomingMoviesView{
+public class UpcomingMoviesFragment extends Fragment
+        implements UpcomingMoviesContracts.UpcomingMoviesView {
 
     private UpcomingMoviesPresenter presenter = new UpcomingMoviesPresenter();
     private ArrayList<UpComingMoviesPojo> movieList = new ArrayList<>();
     private ArrayList<GenrePojo> genreData = new ArrayList<>();
     private ConfigurationResponse dataConfig;
     private RecyclerView recyclerView;
-    private Button pageL, pageA;
     private UpcomingMoviesRecyclerAdapter adapter;
     private AlertDialog dialog = null;
     private static final String MOVIE_LIST = "movie_list";
     private static final String GENRE_LIST = "genre_list";
     private static final String DATA_CONFIG = "data_config";
-    private static Integer page = 1;
+    private static final String MAX_PAGES = "max_pages";
+    private static Integer PAGE = 1;
+    private static Integer NO_SCROLLING = 0;
     private Integer maxPages = 0;
+    private Integer orientation;
+    private static String TAG = UpcomingMoviesFragment.class.getSimpleName();
 
-    public static UpcomingMoviesFragment newInstance(){
+    public static UpcomingMoviesFragment newInstance() {
         return new UpcomingMoviesFragment();
     }
 
@@ -62,10 +67,6 @@ public class UpcomingMoviesFragment extends Fragment implements UpcomingMoviesCo
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_upcoming_movies, container, false);
-        pageL = view.findViewById(R.id.less_page);
-        pageA = view.findViewById(R.id.add_page);
-        pageL.setOnClickListener(changPageButtons);
-        pageA.setOnClickListener(changPageButtons);
         recyclerView = view.findViewById(R.id.recycler_container);
 
         //Basic config of Recycler view
@@ -74,54 +75,33 @@ public class UpcomingMoviesFragment extends Fragment implements UpcomingMoviesCo
 
         //Presenter init
         presenter.init(this);
-
-        if(savedInstanceState != null){
+        orientation = getScreenOrientation();
+        if (savedInstanceState != null) {
             movieList = (ArrayList<UpComingMoviesPojo>) savedInstanceState.getSerializable(MOVIE_LIST);
             genreData = (ArrayList<GenrePojo>) savedInstanceState.getSerializable(GENRE_LIST);
             dataConfig = (ConfigurationResponse) savedInstanceState.getSerializable(DATA_CONFIG);
-            if(dataConfig != null) {
-                adapter = new UpcomingMoviesRecyclerAdapter(movieList, dataConfig.getImages(), genreData);
+            maxPages = savedInstanceState.getInt(MAX_PAGES);
+            if (dataConfig != null) {
+                adapter = new UpcomingMoviesRecyclerAdapter(movieList, dataConfig.getImages(), genreData, orientation);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+                setRecyclerBottomListener();
             }
-        }else {
-            presenter.showLoading();
+        } else {
             presenter.getConfiguration();
         }
         return view;
     }
 
-    /**
-     * OnClickListner method for buttons
-     */
-    private View.OnClickListener changPageButtons = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()){
-                case R.id.less_page:
-                    if(page <= 1){
-                        page = 1;
-                    }else{
-                        page--;
-                        presenter.getUpcomingMovies(page);
-                        presenter.showLoading();
-                        v.setEnabled(false);
-                    }
-                    break;
-                case R.id.add_page:
-                    if(page < maxPages){
-                        page++;
-                        presenter.getUpcomingMovies(page);
-                        presenter.showLoading();
-                        v.setEnabled(false);
-                    }
-                    break;
-            }
-        }
-    };
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
 
     /**
      * Save fragment state
+     *
      * @param outState bundle with info stored
      */
     @Override
@@ -130,6 +110,7 @@ public class UpcomingMoviesFragment extends Fragment implements UpcomingMoviesCo
         outState.putSerializable(MOVIE_LIST, movieList);
         outState.putSerializable(GENRE_LIST, genreData);
         outState.putSerializable(DATA_CONFIG, dataConfig);
+        outState.putInt(MAX_PAGES, maxPages);
     }
 
     /**
@@ -137,10 +118,10 @@ public class UpcomingMoviesFragment extends Fragment implements UpcomingMoviesCo
      */
     @Override
     public void showLoading() {
-        if(dialog == null){
+        if (dialog == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setCancelable(false);
-            builder.setMessage("Retrieving list");
+            builder.setCancelable(true);
+            builder.setMessage(R.string.loading_dialog_string);
             dialog = builder.create();
             dialog.show();
         }
@@ -151,7 +132,7 @@ public class UpcomingMoviesFragment extends Fragment implements UpcomingMoviesCo
      */
     @Override
     public void hideLoading() {
-        if(dialog != null){
+        if (dialog != null) {
             dialog.hide();
             dialog = null;
         }
@@ -162,28 +143,24 @@ public class UpcomingMoviesFragment extends Fragment implements UpcomingMoviesCo
      * stores response from web service in local varibale then passes it to the recycler so it can be painted in device
      */
     @Override
-    public void getUpcomingMoviesSuccess(Response<UpComingMoviesResponse> response) {
+    public void showList(Response<UpComingMoviesResponse> response) {
         UpComingMoviesResponse data = response.body();
-        if(data != null) {
+        if (data != null) {
             maxPages = data.getTotal_pages();
         }
-        movieList.clear();
-        if(data != null) {
+        if (data != null) {
             movieList.addAll(Arrays.asList(data.getResults()));
-            adapter = new UpcomingMoviesRecyclerAdapter(movieList, dataConfig.getImages(), genreData);
+            adapter = new UpcomingMoviesRecyclerAdapter(movieList, dataConfig.getImages(), genreData, orientation);
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
-            presenter.hideLoading();
 
-            //re enable buttons
-            pageL.setEnabled(true);
-            pageA.setEnabled(true);
-        }else{
-            //re enable buttons
-            pageL.setEnabled(true);
-            pageA.setEnabled(true);
-            presenter.hideLoading();
-            Toast.makeText(getContext(), "There was an error while downloading, please try again!", Toast.LENGTH_SHORT).show();
+            setRecyclerBottomListener();
+
+        } else {
+            //response came null
+            Log.e(TAG, response.message());
+            Toast.makeText(getContext(), R.string.error_msg_downloading_again_string, Toast.LENGTH_SHORT).show();
+            presenter.getUpcomingMovies(PAGE, NO_SCROLLING);
         }
     }
 
@@ -192,36 +169,38 @@ public class UpcomingMoviesFragment extends Fragment implements UpcomingMoviesCo
      * Method recovers Data configuration from API and calls for the next web services call
      */
     @Override
-    public void getConfigurationSuccess(Response<ConfigurationResponse> response) {
+    public void storeConfigurationData(Response<ConfigurationResponse> response) {
         dataConfig = response.body();
         presenter.getGenreList();
     }
 
+
     /**
      * Method from {@link com.madness.codingchallange.upcoming_movies_view.fragments.UpcomingMoviesContracts.UpcomingMoviesPresenter}
      * Method recovers Data configuration from API and calls for the next web services call
      */
     @Override
-    public void getGenreListSuccess(Response<GenreResponse> response) {
+    public void storeGenreList(Response<GenreResponse> response) {
         GenreResponse data = response.body();
         genreData.clear();
-        if(data != null) {
+        if (data != null) {
             genreData.addAll(Arrays.asList(data.getGenres()));
-            presenter.getUpcomingMovies(page);
-        }else {
-            //avoid crashing errors, if null genres wont show up
+            presenter.getUpcomingMovies(PAGE, NO_SCROLLING);
+        } else {
+            //avoid crashing errors, if genres is null
             genreData = new ArrayList<>();
-            presenter.getUpcomingMovies(page);
+            presenter.getUpcomingMovies(PAGE, NO_SCROLLING);
         }
     }
 
     /**
      * Method from {@link com.madness.codingchallange.upcoming_movies_view.fragments.UpcomingMoviesContracts.UpcomingMoviesPresenter}
-     * Method tells the user if the webservice didtn respond
+     * Method tells the user if the webservice did'nt respond
      */
     @Override
     public void getConfigurationFail(Throwable t) {
-        Toast.makeText(getContext(), "There was an error while downloading the information", Toast.LENGTH_SHORT).show();
+        Log.e(TAG, t.getMessage());
+        Toast.makeText(getContext(), R.string.error_msg_download_upcoming_movie_list, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -230,15 +209,63 @@ public class UpcomingMoviesFragment extends Fragment implements UpcomingMoviesCo
      */
     @Override
     public void getGenreListFail(Throwable t) {
-        Toast.makeText(getContext(), "There was an error while downloading the information", Toast.LENGTH_SHORT).show();
+        Log.e(TAG, t.getMessage());
+        Toast.makeText(getContext(), R.string.error_msg_download_upcoming_movie_list, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showLastItem(final Integer position) {
+        recyclerView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                recyclerView.scrollToPosition(position - 1);
+            }
+        }, 800);
     }
 
     /**
      * Method from {@link com.madness.codingchallange.upcoming_movies_view.fragments.UpcomingMoviesContracts.UpcomingMoviesPresenter}
-     * Method tells the user if the webservice didtn respond
+     * Method tells the user if the webservice did'nt respond
      */
     @Override
-    public void getUpcomingMoviesFail(Throwable t) {
-        Toast.makeText(getContext(), "There was an error while downloading the information", Toast.LENGTH_SHORT).show();
+    public void showListFail(Throwable t) {
+        Log.e(TAG, t.getMessage());
+        Toast.makeText(getContext(), R.string.error_msg_download_upcoming_movie_list, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Method used to get current orientation of the screen   * @return screen orientation
+     */
+    public int getScreenOrientation() {
+        int orientation = Configuration.ORIENTATION_UNDEFINED;
+        if (getActivity() != null) {
+            Display getOrient = getActivity().getWindowManager().getDefaultDisplay();
+
+            if (getOrient.getWidth() == getOrient.getHeight()) {
+                orientation = Configuration.ORIENTATION_SQUARE;
+            } else {
+                if (getOrient.getWidth() < getOrient.getHeight()) {
+                    orientation = Configuration.ORIENTATION_PORTRAIT;
+                } else {
+                    orientation = Configuration.ORIENTATION_LANDSCAPE;
+                }
+            }
+        }
+        return orientation;
+    }
+
+    public void setRecyclerBottomListener() {
+        //Recycler listener to know when the user reach last item
+        adapter.setOnBottomReachListener(new UpcomingMoviesRecyclerAdapter.OnBottomReachListener() {
+            @Override
+            public void onBottomReach(int position) {
+                if (PAGE < maxPages) {
+                    PAGE++;
+                    presenter.getUpcomingMovies(PAGE, position);
+                } else {
+                    Toast.makeText(getContext(), R.string.last_item_msg_string, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }

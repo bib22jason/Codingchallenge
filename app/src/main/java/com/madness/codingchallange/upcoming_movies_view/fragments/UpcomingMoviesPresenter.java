@@ -10,11 +10,27 @@ import retrofit2.Response;
 /**
  * Presenter class for the fragment {@link UpcomingMoviesFragment}
  */
-public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.UpcomingMoviesPresenter {
+public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.UpcomingMoviesPresenter, WebDataManager.MovieListCallBack {
 
     //Needed variables for setting the presenter and the WebDataManager for this ´presenter
-    private WebDataManager dataManager = new WebDataManager(this);
+    private WebDataManager dataManager = new WebDataManager(this, this);
     private UpcomingMoviesContracts.UpcomingMoviesView view;
+    private RetrieveMovieListCallback retrieveMovieListCallback;
+
+    /**
+     * Constructor
+     *
+     * @param callback callback from interface
+     */
+    public UpcomingMoviesPresenter(RetrieveMovieListCallback callback) {
+        this.retrieveMovieListCallback = callback;
+    }
+
+    /**
+     * Empty Constructor
+     */
+    UpcomingMoviesPresenter() {
+    }
 
     /**
      * @param view reference from fragment {@link UpcomingMoviesFragment} after implements {@link UpcomingMoviesContracts.UpcomingMoviesView}
@@ -25,26 +41,11 @@ public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.Upcoming
     }
 
     /**
-     * Shows loading alert
-     */
-    @Override
-    public void showLoading() {
-        view.showLoading();
-    }
-
-    /**
-     * hides loading alert
-     */
-    @Override
-    public void hideLoading() {
-        view.hideLoading();
-    }
-
-    /**
      * Retrieves configuration data from API
      */
     @Override
     public void getConfiguration() {
+        view.showLoading();
         dataManager.getConfiguration();
     }
 
@@ -53,7 +54,7 @@ public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.Upcoming
      */
     @Override
     public void getConfigurationSuccess(Response<ConfigurationResponse> response) {
-        view.getConfigurationSuccess(response);
+        view.storeConfigurationData(response);
     }
 
     /**
@@ -61,7 +62,8 @@ public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.Upcoming
      */
     @Override
     public void getConfigurationFail(Throwable t) {
-        view.getUpcomingMoviesFail(t);
+        view.hideLoading();
+        view.getConfigurationFail(t);
     }
 
     /**
@@ -77,7 +79,7 @@ public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.Upcoming
      */
     @Override
     public void getGenreListSuccess(Response<GenreResponse> response) {
-        view.getGenreListSuccess(response);
+        view.storeGenreList(response);
     }
 
     /**
@@ -85,21 +87,37 @@ public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.Upcoming
      */
     @Override
     public void getGenreListFail(Throwable t) {
+        view.hideLoading();
         view.getGenreListFail(t);
     }
 
     /**
      * Retrieves upcoming movie list data from API
+     *
      * @param page number of page
      */
     @Override
-    public void getUpcomingMovies(Integer page) {
+    public void getUpcomingMovies(Integer page, Integer scrollPosition) {
         dataManager.getUpcomingMovies(page);
+        if (scrollPosition != 0) {
+            view.showLoading();
+            view.showLastItem(scrollPosition);
+        }
     }
 
     @Override
     public void getUpcomingMoviesSuccess(Response<UpComingMoviesResponse> response) {
-        view.getUpcomingMoviesSuccess(response);
+        UpComingMoviesResponse data = response.body();
+        if (view != null) {
+            view.showList(response);
+            view.hideLoading();
+        }
+        if (data != null) {
+            dataManager.setMovieList(data);
+        } else {
+            dataManager.setMovieList(null);
+        }
+
     }
 
     /**
@@ -107,8 +125,18 @@ public class UpcomingMoviesPresenter implements UpcomingMoviesContracts.Upcoming
      */
     @Override
     public void getUpcomingMoviesFail(Throwable t) {
-        view.getUpcomingMoviesFail(t);
+        view.hideLoading();
+        view.showListFail(t);
     }
 
+    @Override
+    public void callBack(UpComingMoviesResponse data) {
+        if (retrieveMovieListCallback != null) {
+            retrieveMovieListCallback.getMovieList(data);
+        }
+    }
 
+    public interface RetrieveMovieListCallback {
+        void getMovieList(UpComingMoviesResponse data);
+    }
 }

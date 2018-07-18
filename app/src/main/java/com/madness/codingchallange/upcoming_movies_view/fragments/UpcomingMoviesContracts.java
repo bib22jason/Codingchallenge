@@ -14,11 +14,7 @@ public interface UpcomingMoviesContracts {
     interface UpcomingMoviesPresenter {
         void init(UpcomingMoviesView view);
 
-        // hide-show alert dialog
-        void showLoading();
-        void hideLoading();
-
-        void getUpcomingMovies(Integer page);
+        void getUpcomingMovies(Integer page, Integer scrollPostion);
         void getUpcomingMoviesSuccess(Response<UpComingMoviesResponse> response);
         void getUpcomingMoviesFail(Throwable t);
 
@@ -29,6 +25,7 @@ public interface UpcomingMoviesContracts {
         void getGenreList();
         void getGenreListSuccess(Response<GenreResponse> response);
         void getGenreListFail(Throwable t);
+
     }
 
     interface UpcomingMoviesView {
@@ -36,13 +33,15 @@ public interface UpcomingMoviesContracts {
         void showLoading();
         void hideLoading();
 
-        void getUpcomingMoviesSuccess(Response<UpComingMoviesResponse> response);
-        void getUpcomingMoviesFail(Throwable t);
+        void showList(Response<UpComingMoviesResponse> response);
+        void showLastItem(Integer position);
+        void showListFail(Throwable t);
 
-        void getConfigurationSuccess(Response<ConfigurationResponse> response);
+        void storeConfigurationData(Response<ConfigurationResponse> response);
         void getConfigurationFail(Throwable t);
 
-        void getGenreListSuccess(Response<GenreResponse> response);
+        void storeGenreList(Response<GenreResponse> response);
         void getGenreListFail(Throwable t);
+
     }
 }
