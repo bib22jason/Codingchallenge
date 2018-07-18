@@ -2,7 +2,9 @@ package com.madness.codingchallange.upcoming_movies_view.fragments;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,7 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.madness.codingchallange.R;
@@ -49,6 +52,7 @@ public class UpcomingMoviesFragment extends Fragment
     private static Integer NO_SCROLLING = 0;
     private Integer maxPages = 0;
     private Integer orientation;
+    private Boolean networkAvailable = false;
     private static String TAG = UpcomingMoviesFragment.class.getSimpleName();
 
     public static UpcomingMoviesFragment newInstance() {
@@ -68,7 +72,7 @@ public class UpcomingMoviesFragment extends Fragment
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_upcoming_movies, container, false);
         recyclerView = view.findViewById(R.id.recycler_container);
-
+        TextView noInternetTV = view.findViewById(R.id.no_internet);
         //Basic config of Recycler view
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -76,6 +80,17 @@ public class UpcomingMoviesFragment extends Fragment
         //Presenter init
         presenter.init(this);
         orientation = getScreenOrientation();
+        networkAvailable = isNetworkAvailable(getContext());
+
+        //check network availability
+        if(networkAvailable){
+            recyclerView.setVisibility(View.VISIBLE);
+            noInternetTV.setVisibility(View.GONE);
+        }else{
+            recyclerView.setVisibility(View.GONE);
+            noInternetTV.setVisibility(View.VISIBLE);
+        }
+
         if (savedInstanceState != null) {
             movieList = (ArrayList<UpComingMoviesPojo>) savedInstanceState.getSerializable(MOVIE_LIST);
             genreData = (ArrayList<GenrePojo>) savedInstanceState.getSerializable(GENRE_LIST);
@@ -86,9 +101,17 @@ public class UpcomingMoviesFragment extends Fragment
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 setRecyclerBottomListener();
+            }else{
+                if(networkAvailable) {
+                    movieList = new ArrayList<>();
+                    genreData = new ArrayList<>();
+                    presenter.getConfiguration();
+                }
             }
         } else {
-            presenter.getConfiguration();
+            if(networkAvailable) {
+                presenter.getConfiguration();
+            }
         }
         return view;
     }
@@ -106,11 +129,13 @@ public class UpcomingMoviesFragment extends Fragment
      */
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(MOVIE_LIST, movieList);
-        outState.putSerializable(GENRE_LIST, genreData);
-        outState.putSerializable(DATA_CONFIG, dataConfig);
-        outState.putInt(MAX_PAGES, maxPages);
+        if(networkAvailable) {
+            super.onSaveInstanceState(outState);
+            outState.putSerializable(MOVIE_LIST, movieList);
+            outState.putSerializable(GENRE_LIST, genreData);
+            outState.putSerializable(DATA_CONFIG, dataConfig);
+            outState.putInt(MAX_PAGES, maxPages);
+        }
     }
 
     /**
@@ -267,5 +292,14 @@ public class UpcomingMoviesFragment extends Fragment
                 }
             }
         });
+    }
+
+    public boolean isNetworkAvailable(Context context) {
+        final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        if(connectivityManager != null){
+            return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+        }else{
+            return false;
+        }
     }
 }
